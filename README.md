@@ -1,12 +1,10 @@
 # evidence verify
 
-> Part of the Titan Gate evidence stack: [titan-gate](https://github.com/Rehanrana11/titan-gate-public) produces signed, chained receipts with a daily Merkle ledger — building in public since early 2026. This repo is the standalone, vendor-neutral verifier.
-
 **One command that answers the question your AI audit logs can't:**
 *who guarantees this log wasn't altered by the system that produced it?*
 
 ```
-$ python evidence_verify.py receipts.jsonl
+$ evidence verify receipts.jsonl
 
 entries checked : 5
 chain verdict   : CHAIN VALID
@@ -40,15 +38,23 @@ see what an auditor would see.
 
 ## Install
 
-Python 3.10+ — standard library only, nothing to pip install:
+Go 1.21+:
 
 ```
-python evidence_verify.py sample_selfattested.jsonl
+go build -o evidence .
+./evidence verify sample_selfattested.jsonl
+```
+
+Python reference implementation (identical logic, used for cross-testing):
+
+```
+python3 evidence_verify.py sample_selfattested.jsonl
 ```
 
 ## Exit codes
 
-`0` = chain valid **and** externally anchored. `1` = self-attested or broken/tampered. `2` = usage or file error. CI can gate on `0`.
+`0` = chain valid **and** anchored (round-trip verified when `--anchor` is given). `1` = self-attested, mismatch, or broken/tampered.
+`2` = usage or file error. CI can gate on `0`.
 
 ## Receipt format (v0.1 — spec RFC coming)
 
@@ -66,6 +72,28 @@ One JSON object per line (JSONL):
 ```
 
 `canonical(event)` = JSON with sorted keys, no whitespace (RFC 8785-style).
+The Go and Python implementations are byte-compatible.
+
+
+## v0.2: anchor round-trip
+
+Anchor a chain (store the output OUTSIDE the producing system — a separate
+repo, a gist, S3, a timestamping service):
+
+```
+python evidence_verify.py anchor receipts.jsonl > anchor.json
+```
+
+Verify against the anchor (local file or https URL):
+
+```
+python evidence_verify.py verify receipts.jsonl --anchor anchor.json
+python evidence_verify.py verify receipts.jsonl --anchor https://example.com/anchor.json
+```
+
+Round-trip verification catches what hash chains alone cannot: full history
+rewrites (re-signed chains) and truncation. The independence guarantee is
+exactly as strong as the independence of where the anchor lives.
 
 ## Samples
 
@@ -73,17 +101,15 @@ One JSON object per line (JSONL):
 - `sample_anchored.jsonl` — valid chain with external anchor references
 - `sample_tampered.jsonl` — one entry silently edited; the verifier catches it
 
-Regenerate with `python make_samples.py`.
+Regenerate with `python3 make_samples.py`.
 
 ## Roadmap
 
 - Ed25519 signature verification (asymmetric, third-party verifiable)
 - eIDAS-compatible qualified timestamp validation for anchors
-- Anchor-provider verification (round-trip check against the anchor ref)
-- Adapters: gateway plugin export, LangChain callback, LiteLLM, OpenAI
+- Adapters: Kong plugin export, LangChain callback, LiteLLM, OpenAI
   compliance-log export (which retains ~30 days by default — mind the
   6-month retention gap)
-- `pip install evidence-verify` packaging
 
 ## License
 

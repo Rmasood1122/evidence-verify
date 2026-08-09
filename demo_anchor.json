@@ -1,0 +1,6 @@
+{
+  "anchor_version": "0.2",
+  "entry_count": 5,
+  "head_hash": "f4981958a26f9273207078124c2322c2b294fb3959f4f2cdad9d69506e62e709",
+  "note": "Store this record OUTSIDE the producing system (separate repo, gist, S3 bucket, timestamping service). Independence comes from where this lives, not from this file itself."
+}
