@@ -1,5 +1,7 @@
 # evidence verify
 
+> Part of the Titan Gate evidence stack: [titan-gate](https://github.com/Rehanrana11/titan-gate-public) produces signed, chained receipts with a daily Merkle ledger — building in public since early 2026. This repo is the standalone, vendor-neutral verifier.
+
 **One command that answers the question your AI audit logs can't:**
 *who guarantees this log wasn't altered by the system that produced it?*
 
