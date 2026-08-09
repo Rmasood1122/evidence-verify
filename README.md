@@ -46,6 +46,10 @@ Python 3.10+ — standard library only, nothing to pip install:
 python evidence_verify.py sample_selfattested.jsonl
 ```
 
+## Exit codes
+
+`0` = chain valid **and** externally anchored. `1` = self-attested or broken/tampered. `2` = usage or file error. CI can gate on `0`.
+
 ## Receipt format (v0.1 — spec RFC coming)
 
 One JSON object per line (JSONL):

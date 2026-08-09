@@ -45,7 +45,12 @@ def verify(path):
     anchored_entries = 0
     entries = []
 
-    with open(path) as f:
+    try:
+        f = open(path)
+    except OSError as e:
+        print(f"error: cannot read {path}: {e.strerror or e}", file=sys.stderr)
+        sys.exit(2)
+    with f:
         for lineno, line in enumerate(f, 1):
             line = line.strip()
             if not line:
@@ -120,7 +125,9 @@ def main():
         print(f"  ! {p}")
     if "independence" in r:
         print(f"independence    : {r['independence']}")
-    sys.exit(0 if r["verdict"] == "CHAIN VALID" and not r.get("problems") else 1)
+    anchored_ok = (r["verdict"] == "CHAIN VALID" and not r.get("problems")
+                   and r.get("anchored_entries", 0) > 0)
+    sys.exit(0 if anchored_ok else 1)
 
 
 if __name__ == "__main__":
