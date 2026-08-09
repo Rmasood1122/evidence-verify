@@ -19,7 +19,7 @@ independence    : SELF-ATTESTED — would not survive independence challenge.
 ## Why this exists
 
 The EU AI Act's Article 12 requires automatic event logging for high-risk AI
-systems (enforceable since August 2, 2026, retention ≥6 months under Articles
+systems (Annex III obligations now apply from December 2, 2027 under the July 2026 Omnibus amendment; retention ≥6 months under Articles
 19/26(6)). Most vendors answer with hash-chained logs.
 
 A hash chain proves **sequence**. It does not prove **independence**. If the
