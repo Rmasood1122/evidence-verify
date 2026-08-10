@@ -51,6 +51,33 @@ Python reference implementation (identical logic, used for cross-testing):
 python3 evidence_verify.py sample_selfattested.jsonl
 ```
 
+
+## v0.3: pip install + LangChain
+
+```
+pip install evidence-verify            # core, zero dependencies
+pip install "evidence-verify[langchain]"   # + the callback handler
+```
+
+Every LLM and tool call in a LangChain app becomes a chained receipt:
+
+```python
+from evidence_verify import EvidenceCallbackHandler
+
+handler = EvidenceCallbackHandler("receipts.jsonl")
+llm.invoke(prompt, config={"callbacks": [handler]})
+```
+
+By default only SHA-256 fingerprints of prompts/responses are recorded —
+the evidence file proves what happened without containing your data
+(`include_text=True` opts into full text). Then:
+
+```
+evidence verify receipts.jsonl
+evidence anchor receipts.jsonl > anchor.json     # store this OUTSIDE
+evidence verify receipts.jsonl --anchor anchor.json
+```
+
 ## Exit codes
 
 `0` = chain valid **and** anchored (round-trip verified when `--anchor` is given). `1` = self-attested, mismatch, or broken/tampered.

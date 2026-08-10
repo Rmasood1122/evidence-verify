@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "evidence-verify"
+version = "0.3.0"
+description = "Tamper-evident, anchorable evidence receipts for AI systems - chain, anchor, verify."
+readme = "README.md"
+license = {text = "Apache-2.0"}
+authors = [{name = "Rehan"}]
+requires-python = ">=3.10"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: Apache Software License",
+  "Topic :: Security",
+]
+
+[project.optional-dependencies]
+langchain = ["langchain-core>=0.3"]
+
+[project.urls]
+Homepage = "https://github.com/Rehanrana11/evidence-verify"
+
+[project.scripts]
+evidence = "evidence_verify.core:main"
