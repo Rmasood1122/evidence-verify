@@ -20,7 +20,7 @@ classifiers = [
 langchain = ["langchain-core>=0.3"]
 
 [project.urls]
-Homepage = "https://github.com/Rehanrana11/evidence-verify"
+Homepage = "https://github.com/Rmasood1122/evidence-verify"
 
 [project.scripts]
 evidence = "evidence_verify.core:main"
