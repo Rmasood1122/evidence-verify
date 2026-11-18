@@ -468,7 +468,9 @@ def section_g():
             imports.update(a.name.split(".")[0] for a in node.names)
         elif isinstance(node, ast.ImportFrom) and node.module:
             imports.add(node.module.split(".")[0])
-    stdlib = {"hashlib", "json", "sys"}
+    # Every module the standard library ships, so a lazy stdlib import (urllib in
+    # load_anchor) is not reported as a dependency. A third-party import still fails.
+    stdlib = set(sys.stdlib_module_names)
     expect(67, "zero-dependency claim true (stdlib only)", imports <= stdlib,
            note_pass=f"imports: {sorted(imports)}",
            note_fail=f"non-stdlib imports found: {sorted(imports - stdlib)}")
